@@ -1,0 +1,286 @@
+<div class="container-fluid px-3 py-5 view">
+  <div class="row" id="view">
+    <!-- !-----------------FILTER-------------------------- -->
+    <div class="col-md-3">
+      <div class="sticky-top pt-5" style="z-index: 1 !important;">
+        <mat-card>
+          <h2>
+            <i class="fa-solid fa-filter"></i>
+            Filter ({{ allProducts.length }})
+          </h2>
+          <small>filter by category</small>
+          <select
+            class="form-select"
+            aria-label="Default select example"
+            [(ngModel)]="selectedCategory"
+            (change)="changeCategory($event)"
+            title="categories"
+          >
+            <option selected>All products</option>
+            <option
+              *ngFor="let category of allCategories"
+              [value]="category.name"
+            >
+              {{ category.name }}
+            </option>
+          </select>
+
+          <div class="custom-slider py-4">
+            <small>
+              filter by price
+            </small>
+            <ngx-slider
+              [(value)]="minValue"
+              [(highValue)]="maxValue"
+              [options]="options"
+              (userChange)="minValueChanged($event)"
+            ></ngx-slider>
+          </div>
+          <mat-slide-toggle
+            [checked]="newProducts"
+            (change)="newProductChanger($event)"
+          >
+            New Arrival
+          </mat-slide-toggle>
+          <br />
+          <br />
+          <mat-slide-toggle
+            [checked]="saleProducts"
+            (change)="saleProductChanger($event)"
+          >
+            Sale Products
+          </mat-slide-toggle>
+        </mat-card>
+      </div>
+    </div>
+
+    <!-- !-----------------PRODUCTS-------------------------- -->
+    <div class="col-md-9">
+      <h1 class="text-danger text-center pt-3">All products</h1>
+      <mat-form-field class="w-100" appearance="fill">
+        <mat-label>Search</mat-label>
+        <input
+          matInput
+          #search="ngModel"
+          ngModel
+          (keyup)="searchByNameOrCategoryName(search)"
+          placeholder="search by product name"
+        />
+      </mat-form-field>
+
+      <div
+        class="row row-cols-2 row-cols-sm-3 row-cols-md-3 row-cols-lg-3 row-cols-xl-4 g-3 g-lg-3 pb-3 shadow-sm"
+      >
+        <ng-container *ngIf="isLoadingProducts">
+          <div
+            class="col d-flex align-items-stretch"
+            *ngFor="let product of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]"
+          >
+            <mat-card class="shop-card shadow w-100 pt-3" aria-hidden="true">
+              <div
+                class="d-flex align-items-center justify-content-center pt-3"
+              >
+                <img
+                  matCardImage
+                  class="placeholder placeholder-glow placeholder-all-products"
+                />
+              </div>
+
+              <div class="placeholder-glow fw-bolder fs-6 d-name">
+                <span class="placeholder col-6"></span>
+              </div>
+
+              <div
+                class="placeholder-glow d-flex align-items-center justify-content-between pb-3"
+              >
+                <span class="placeholder col-4"></span>
+                <button class="btn btn-outline-danger btn-sm placeholder">
+                  <i class="fa-solid fa-plus placeholder"></i>
+                </button>
+              </div>
+            </mat-card>
+          </div>
+        </ng-container>
+        <div
+          id="products"
+          class="col d-flex align-items-stretch"
+          *ngFor="
+            let product of allProducts
+              | paginate: { itemsPerPage: 12, currentPage: page }
+          "
+        >
+          <mat-card
+            class="shop-card shadow w-100"
+            *ngIf="!isLoadingProducts"
+            (click)="getById(product)"
+          >
+            <div class="sale-icon">10%</div>
+            <div class="d-flex align-items-center justify-content-center pt-3">
+              <img
+                [src]="product.imgUrl"
+                [alt]="product.name"
+                matCardImage
+                class="img-fluid"
+                data-bs-toggle="modal"
+                data-bs-target="#exampleModal"
+              />
+            </div>
+
+            <div
+              class="fw-bolder fs-6 d-name all-product-name"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModal"
+            >
+              {{ product.name }}
+            </div>
+
+            <div class="d-flex align-items-center justify-content-between">
+              <span
+                class="fw-bold main-color fs-6 d-price text-danger"
+                data-bs-toggle="modal"
+                data-bs-target="#exampleModal"
+              >
+                {{ product.price | currency }}
+              </span>
+              <button
+                class="btn btn-outline-danger btn-sm"
+                (click)="addToShoppingCard(product)"
+              >
+                <i class="fa-solid fa-plus"></i>
+              </button>
+            </div>
+          </mat-card>
+        </div>
+      </div>
+      <ng-container *ngIf="allProducts.length > 16">
+        <div class="has-text-centered py-5 text-end">
+          <pagination-controls
+            [autoHide]="autoHide"
+            [responsive]="responsive"
+            (pageChange)="page = $event"
+          ></pagination-controls>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>
+<!-- !MODAL VIEW PRODUCT DETAILS -->
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title fw-bold" id="exampleModalLabel">
+          {{ productId.name }}
+        </h3>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-4 d-flex align-items-start justify-content-center">
+            <img
+              [src]="productId.imgUrl"
+              class="img-fluid"
+              [alt]="productId.name"
+            />
+          </div>
+          <div class="col-md-8 px-3">
+            <h4 class="text-dark">
+              Product name:
+              <span class="fw-semibold">{{ productId.name }}</span>
+            </h4>
+
+            <h4>
+              price:
+              <ng-container *ngIf="productId.sale">
+                <span class="text-danger fw-semibold">
+                  {{ productId.salePrice | currency }}
+                </span>
+              </ng-container>
+              <ng-container *ngIf="productId.sale; else price">
+                <span class="text-decoration-line-through text-muted">
+                  {{ productId.price | currency }}
+                </span>
+              </ng-container>
+              <ng-template #price>
+                <span class="fw-bold">
+                  {{ productId.price | currency }}
+                </span>
+              </ng-template>
+            </h4>
+
+            <h4>
+              category:
+              <span class="fw-bold">{{ productId.categoryName }}</span>
+            </h4>
+
+            <h4 class="text-danger">Product description</h4>
+            <p>
+              {{ productId.description }}
+            </p>
+
+            <button class="btn btn-outline-danger">add to card</button>
+          </div>
+        </div>
+        <hr />
+        <h3>Recommend For You</h3>
+        <div
+          class="row row-cols-2 row-cols-sm-2 row-cols-md-4 row-cols-xl-4 g-3 px-2"
+        >
+          <div
+            class="col d-flex align-items-stretch"
+            *ngFor="let product of suggestionProductsForRecommend"
+            (click)="getById(product)"
+          >
+            <mat-card class="shop-card shadow">
+              <div class="sale-icon">10%</div>
+              <div class="d-flex align-items-center justify-content-center">
+                <img
+                  [src]="product.imgUrl"
+                  [alt]="product.name"
+                  matCardImage
+                  class="img-fluid w-100"
+                />
+              </div>
+
+              <div class="fw-bolder fs-6 d-name Modal-name">
+                {{ product.name }}
+              </div>
+
+              <div class="d-flex align-items-center justify-content-between">
+                <span class="fw-bold main-color fs-6 d-price Modal-name">
+                  {{ product.price | currency }}
+                </span>
+                <button class="btn btn-outline-danger btn-sm">
+                  <i class="fa-solid fa-plus"></i>
+                </button>
+              </div>
+            </mat-card>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          mat-flat-button
+          color="warn"
+          data-bs-dismiss="modal"
+        >
+          dismiss
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

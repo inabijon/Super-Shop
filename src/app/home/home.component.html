@@ -1,0 +1,736 @@
+<div id="home" class="container py-3">
+  <div class="row">
+    <div class="col-md-3 shadow mobile-category">
+      <!--!________________CATEGORIES____________________ -->
+      <mat-list class="rounded" role="list">
+        <a routerLink="/" fragment="electronic">
+          <mat-list-item
+            role="listitem"
+            (click)="electronicProducts()"
+            (click)="onClick(1)"
+          >
+            <span class="iconify" data-icon="icon-park:washing-machine"></span>
+            &nbsp; {{ 'home.product-categories.1' | translate }}
+          </mat-list-item>
+        </a>
+        <a routerLink="/" fragment="phone">
+          <mat-list-item
+            role="listitem"
+            (click)="phoneProducts()"
+            (click)="onClick(2)"
+          >
+            <span
+              class="iconify"
+              data-icon="flat-color-icons:two-smartphones"
+            ></span>
+            &nbsp; {{ 'home.product-categories.2' | translate }}
+          </mat-list-item>
+        </a>
+        <a routerLink="/" fragment="headphone">
+          <mat-list-item
+            role="listitem"
+            (click)="headphoneProducts()"
+            (click)="onClick(3)"
+          >
+            <span class="iconify" data-icon="noto-v1:headphone"></span>
+            &nbsp; {{ 'home.product-categories.3' | translate }}
+          </mat-list-item>
+        </a>
+        <a routerLink="/" fragment="watch">
+          <mat-list-item
+            role="listitem"
+            (click)="watchProducts()"
+            (click)="onClick(4)"
+          >
+            <span class="iconify" data-icon="emojione-v1:watch"></span>
+            &nbsp; {{ 'home.product-categories.4' | translate }}
+          </mat-list-item>
+        </a>
+        <a routerLink="/" fragment="sunglass">
+          <mat-list-item
+            role="listitem"
+            (click)="sunglassProducts()"
+            (click)="onClick(6)"
+          >
+            <span class="iconify" data-icon="fxemoji:darksunglasses"></span>
+            &nbsp; {{ 'home.product-categories.5' | translate }}
+          </mat-list-item>
+        </a>
+        <a routerLink="/" fragment="shoes">
+          <mat-list-item
+            role="listitem"
+            (click)="shoesProducts()"
+            (click)="onClick(5)"
+          >
+            <span class="iconify" data-icon="openmoji:ballet-shoes"></span>
+            &nbsp; {{ 'home.product-categories.6' | translate }}
+          </mat-list-item>
+        </a>
+        <a routerLink="/" fragment="makeup">
+          <mat-list-item
+            role="listitem"
+            (click)="makeupProducts()"
+            (click)="onClick(7)"
+          >
+            <span class="iconify" data-icon="fxemoji:lipstick"></span>
+            &nbsp; {{ 'home.product-categories.7' | translate }}
+          </mat-list-item>
+        </a>
+        <a routerLink="/" fragment="plant">
+          <mat-list-item
+            role="listitem"
+            (click)="plantProducts()"
+            (click)="onClick(8)"
+          >
+            <span class="iconify" data-icon="noto:potted-plant"></span>
+            &nbsp; {{ 'home.product-categories.8' | translate }}
+          </mat-list-item>
+        </a>
+      </mat-list>
+    </div>
+    <!--!_________________________________CAROUSEL________________________________________-->
+    <div class="col-md-9 mobile-carousel">
+      <owl-carousel-o [options]="carousel">
+        <!-- TODO________________Carousel image arrive from backend_________________________ -->
+        <ng-container *ngFor="let slide of carouselStore">
+          <ng-template class="text-center" carouselSlide [id]="slide.id">
+            <img
+              [src]="slide.src"
+              [alt]="slide.alt"
+              class="img-fluid carousel-img"
+              [title]="slide.title"
+            />
+          </ng-template>
+        </ng-container>
+      </owl-carousel-o>
+    </div>
+  </div>
+</div>
+
+<!-- !___________________________MAIN__________________________________ -->
+<div class="container-fluid sale-section">
+  <!-- !____________________SALE OWL CAROUSEL___________________________ -->
+  <div class="container py-5">
+    <h1 class="fw-bold">
+      <i class="fa-solid fa-bolt main-color"></i>
+      {{ 'home.categories.1' | translate }}
+    </h1>
+    <owl-carousel-o class="sale-p" [options]="saleProducts">
+      <!--TODO_______________________DATA ARRIVE FROM BACKEND_____________________________ -->
+      <ng-container
+        *ngFor="let suggest of suggestionProducts"
+        class="d-flex align-items-stretch"
+      >
+        <ng-template
+          class="text-center mx-auto d-flex align-items-stretch"
+          carouselSlide
+          [id]="suggest._id"
+        >
+          <div class="pb-3 pt-2">
+            <mat-card
+              class="sale-card shadow d-flex align-items-stretch"
+              (click)="getById(suggest)"
+            >
+              <div class="w-100">
+                <div class="sale-icon">40% off</div>
+                <div class="d-flex align-items-center justify-content-center">
+                  <img
+                    [src]="suggest.imgUrl"
+                    [alt]="suggest.name"
+                    matCardImage
+                    class="img-fluid"
+                    data-bs-toggle="modal"
+                    data-bs-target="#productModal"
+                  />
+                </div>
+
+                <div
+                  class="fw-bolder fs-6 sale-name all-product-name"
+                  data-bs-toggle="modal"
+                  data-bs-target="#productModal"
+                >
+                  {{ suggest.name | translate }}
+                </div>
+                <div class="d-flex align-items-center justify-content-between">
+                  <span
+                    class="fw-bold main-color fs-6 sale-price"
+                    data-bs-toggle="modal"
+                    data-bs-target="#productModal"
+                  >
+                    {{ suggest.price | currency }}
+                  </span>
+                  <button
+                    class="btn btn-outline-danger btn-sm"
+                    (click)="addToShoppingCard(suggest)"
+                  >
+                    <i class="fa-solid fa-plus"></i>
+                  </button>
+                </div>
+              </div>
+            </mat-card>
+          </div>
+        </ng-template>
+      </ng-container>
+    </owl-carousel-o>
+  </div>
+
+  <!-- !__________________________NEW ARRIVALS_________________________________ -->
+  <div id="newProducts" class="container pt-3 pb-5">
+    <div class="d-flex align-items-center justify-content-between">
+      <h1 class="fw-bold py-3">
+        <img src="../../assets/badges/new.png" width="45px" alt="" />
+        {{ 'home.categories.2' | translate }}
+      </h1>
+      <a
+        routerLink="/view-all"
+        fragment="view"
+        class="text-decoration-none main-color"
+      >
+        {{ 'home.categories.view' | translate }}
+        <i class="fa-solid fa-caret-right text-dark"></i>
+      </a>
+    </div>
+    <div
+      class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6 g-2 g-lg-3 bg-white py-3 shadow-sm"
+    >
+      <!--TODO_______________________DATA ARRIVE FROM BACKEND_____________________________ -->
+      <div
+        class="col d-flex align-items-stretch"
+        *ngFor="let newArrival of limitedNewArrivalProducts"
+      >
+        <mat-card
+          class="new-arrivals"
+          (click)="getById(newArrival)"
+          data-bs-toggle="modal"
+          data-bs-target="#productModal"
+        >
+          <div class="d-flex align-items-center justify-content-center">
+            <img
+              [src]="newArrival.imgUrl"
+              [alt]="newArrival.name"
+              matCardImage
+              class="img-fluid"
+              data-bs-toggle="modal"
+              data-bs-target="#productModal"
+            />
+          </div>
+
+          <div
+            class="fw-normal pb-1 fs-6 all-product-name"
+            data-bs-toggle="modal"
+            data-bs-target="#productModal"
+          >
+            {{ newArrival.name }}
+          </div>
+
+          <span class="fw-bold main-color fs-6">
+            {{ newArrival.price | currency }}
+          </span>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+
+  <!-- !_______________________________BIG DISCOUNT___________________________________ -->
+  <div id="discounts" class="container py-5">
+    <div class="d-flex align-items-center justify-content-between">
+      <h1 class="fw-bold py-3">
+        <i class="fa-solid fa-gift main-color fs-3"></i>
+        {{ 'home.categories.3' | translate }}
+      </h1>
+      <a
+        routerLink="/view-all"
+        fragment="view"
+        class="text-decoration-none main-color"
+      >
+        {{ 'home.categories.view' | translate }}
+        <i class="fa-solid fa-caret-right text-dark"></i>
+      </a>
+    </div>
+    <owl-carousel-o class="sale-p" [options]="bigDiscount">
+      <!--TODO_______________________DATA ARRIVE FROM BACKEND_____________________________ -->
+      <ng-container
+        class="d-flex align-items-stretch"
+        *ngFor="let discount of limitedDiscountProducts"
+      >
+        <ng-template
+          class="text-center mx-auto d-flex align-items-stretch"
+          carouselSlide
+          [id]="discount._id"
+        >
+          <div class="pb-3 pt-2 d-flex align-items-stretch">
+            <mat-card
+              class="discount-card d-flex align-items-stretch"
+              (click)="getById(discount)"
+              data-bs-toggle="modal"
+              data-bs-target="#productModal"
+            >
+              <div>
+                <div class="d-flex align-items-center justify-content-center">
+                  <img
+                    [src]="discount.imgUrl"
+                    [alt]="discount.name"
+                    matCardImage
+                    class="img-fluid"
+                  />
+                </div>
+
+                <div class="fw-normal pb-2 fs-6 sale-name all-product-name">
+                  {{ discount.name }}
+                </div>
+
+                <span class="fw-bold main-color fs-6 sale-price">
+                  {{ discount.price | currency }}
+                </span>
+              </div>
+            </mat-card>
+          </div>
+        </ng-template>
+      </ng-container>
+    </owl-carousel-o>
+  </div>
+
+  <!-- !________________________BRANDS MOBILE PHONES________________________________ -->
+  <div id="shops" class="container-lg py-5">
+    <div class="row">
+      <div class="col-lg-3">
+        <mat-accordion>
+          <div class="sticky-top" style="z-index: 1 !important;">
+            <mat-expansion-panel class="py-3" hideToggle [expanded]="true">
+              <mat-expansion-panel-header>
+                <mat-panel-title class="fw-bold fs-5 py-3">
+                  categories
+                </mat-panel-title>
+                <mat-panel-description
+                  class="fs-6 fw-bold"
+                ></mat-panel-description>
+              </mat-expansion-panel-header>
+              <mat-list class="rounded" role="list">
+                <div class="row">
+                  <div class="col">
+                    <a routerLink="/" fragment="electronic">
+                      <mat-list-item
+                        role="listitem"
+                        (click)="electronicProducts()"
+                        (click)="onClick(1)"
+                        [ngClass]="{ active: tab === 'electronic' }"
+                      >
+                        <span
+                          class="iconify"
+                          data-icon="icon-park:washing-machine"
+                        ></span>
+                        &nbsp; {{ 'home.product-categories.1' | translate }}
+                      </mat-list-item>
+                    </a>
+                    <a routerLink="/" fragment="phone">
+                      <mat-list-item
+                        role="listitem"
+                        (click)="phoneProducts()"
+                        (click)="onClick(2)"
+                        [ngClass]="{ active: tab === 'phone' }"
+                      >
+                        <span
+                          class="iconify"
+                          data-icon="flat-color-icons:two-smartphones"
+                        ></span>
+                        &nbsp; {{ 'home.product-categories.2' | translate }}
+                      </mat-list-item>
+                    </a>
+                    <a routerLink="/" fragment="headphone">
+                      <mat-list-item
+                        role="listitem"
+                        (click)="headphoneProducts()"
+                        (click)="onClick(3)"
+                        [ngClass]="{ active: tab === 'headphone' }"
+                      >
+                        <span
+                          class="iconify"
+                          data-icon="noto-v1:headphone"
+                        ></span>
+                        &nbsp; {{ 'home.product-categories.3' | translate }}
+                      </mat-list-item>
+                    </a>
+                    <a routerLink="/" fragment="watch">
+                      <mat-list-item
+                        role="listitem"
+                        (click)="watchProducts()"
+                        (click)="onClick(4)"
+                        [ngClass]="{ active: tab === 'watch' }"
+                      >
+                        <span
+                          class="iconify"
+                          data-icon="emojione-v1:watch"
+                        ></span>
+                        &nbsp; {{ 'home.product-categories.4' | translate }}
+                      </mat-list-item>
+                    </a>
+                  </div>
+                  <div class="col">
+                    <a routerLink="/" fragment="shoes">
+                      <mat-list-item
+                        role="listitem"
+                        (click)="shoesProducts()"
+                        (click)="onClick(5)"
+                        [ngClass]="{ active: tab === 'shoes' }"
+                      >
+                        <span
+                          class="iconify"
+                          data-icon="openmoji:ballet-shoes"
+                        ></span>
+                        &nbsp; {{ 'home.product-categories.6' | translate }}
+                      </mat-list-item>
+                    </a>
+                    <a routerLink="/" fragment="sunglass">
+                      <mat-list-item
+                        role="listitem"
+                        (click)="sunglassProducts()"
+                        (click)="onClick(6)"
+                        [ngClass]="{ active: tab === 'sunglasses' }"
+                      >
+                        <span
+                          class="iconify"
+                          data-icon="fxemoji:darksunglasses"
+                        ></span>
+                        &nbsp; {{ 'home.product-categories.5' | translate }}
+                      </mat-list-item>
+                    </a>
+                    <a routerLink="/" fragment="makeup">
+                      <mat-list-item
+                        role="listitem"
+                        (click)="makeupProducts()"
+                        (click)="onClick(7)"
+                        [ngClass]="{ active: tab === 'makeup' }"
+                      >
+                        <span
+                          class="iconify"
+                          data-icon="fxemoji:lipstick"
+                        ></span>
+                        &nbsp; {{ 'home.product-categories.7' | translate }}
+                      </mat-list-item>
+                    </a>
+                    <a routerLink="/" fragment="plant">
+                      <mat-list-item
+                        role="listitem"
+                        (click)="plantProducts()"
+                        (click)="onClick(8)"
+                        [ngClass]="{ active: tab === 'plants' }"
+                      >
+                        <span
+                          class="iconify"
+                          data-icon="noto:potted-plant"
+                        ></span>
+                        &nbsp; {{ 'home.product-categories.8' | translate }}
+                      </mat-list-item>
+                    </a>
+                  </div>
+                </div>
+              </mat-list>
+            </mat-expansion-panel>
+          </div>
+        </mat-accordion>
+      </div>
+      <div class="col-lg-9" id="main">
+        <span id="electronic"></span>
+        <span id="phone"></span>
+        <span id="headphone"></span>
+        <span id="watch"></span>
+        <span id="shoes"></span>
+        <span id="sunglass"></span>
+        <span id="makeup"></span>
+        <span id="plant"></span>
+        <!-- TODO______________________THIS IS A MAIN CARD PHONES ____________________________ -->
+        <div class="d-flex align-items-center justify-content-between">
+          <h1 class="fw-normal pt-3 pb-1">
+            <div class="d-flex align-items-center">
+              <img
+                src="../../assets/badges/brand-identity.png"
+                width="37px"
+                class="px-1"
+                alt=""
+              />
+              {{ 'home.categories.4' | translate }} &nbsp;
+              <small class="fs-5">({{ productsByCategoryName.length }})</small>
+            </div>
+          </h1>
+          <a
+            routerLink="/view-all"
+            fragment="view"
+            class="text-decoration-none main-color"
+          >
+            {{ 'home.categories.view' | translate }}
+            <i class="fa-solid fa-caret-right text-dark"></i>
+          </a>
+        </div>
+        <div
+          class="row row-cols-2 row-cols-sm-3 row-cols-md-3 row-cols-lg-3 row-cols-xl-4 g-3 g-lg-3 pb-3 shadow-sm"
+        >
+          <ng-container *ngIf="isLoadingProducts">
+            <div
+              class="col d-flex align-items-stretch"
+              *ngFor="let product of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]"
+            >
+              <mat-card class="shop-card shadow w-100" aria-hidden="true">
+                <div class="d-flex align-items-center justify-content-center">
+                  <img
+                    matCardImage
+                    class="placeholder placeholder-glow placeholder-all-products"
+                  />
+                </div>
+
+                <div class="placeholder-glow fw-bolder fs-6 d-name">
+                  <span class="placeholder col-6"></span>
+                </div>
+
+                <div
+                  class="placeholder-glow d-flex align-items-center justify-content-between pb-3"
+                >
+                  <span class="placeholder col-4"></span>
+                  <button class="btn btn-outline-danger btn-sm placeholder">
+                    <i class="fa-solid fa-plus placeholder"></i>
+                  </button>
+                </div>
+              </mat-card>
+            </div>
+          </ng-container>
+
+          <!-- TODO_____________________THIS ARRIVE FROM BACKEND_____________________________ -->
+          <div
+            id="products"
+            class="col d-flex align-items-stretch"
+            *ngFor="
+              let product of productsByCategoryName
+                | paginate: { itemsPerPage: 12, currentPage: page }
+            "
+          >
+            <mat-card
+              class="shop-card shadow"
+              *ngIf="!isLoadingProducts"
+              (click)="getById(product)"
+            >
+              <div class="sale-icon">10%</div>
+              <div class="d-flex align-items-center justify-content-center">
+                <img
+                  [src]="product.imgUrl"
+                  [alt]="product.name"
+                  matCardImage
+                  class="img-fluid"
+                  data-bs-toggle="modal"
+                  data-bs-target="#productModal"
+                />
+              </div>
+
+              <div class="fw-bolder fs-6 d-name all-product-name">
+                {{ product.name }}
+              </div>
+
+              <div class="d-flex align-items-center justify-content-between">
+                <span class="fw-bold main-color fs-6 d-price">
+                  {{ product.price | currency }}
+                </span>
+
+                <button
+                  (click)="addToShoppingCard(product)"
+                  class="btn btn-outline-danger btn-sm"
+                >
+                  <i class="fa-solid fa-plus"></i>
+                </button>
+              </div>
+            </mat-card>
+          </div>
+        </div>
+        <ng-container *ngIf="productsByCategoryName.length > 12">
+          <div class="has-text-centered py-5 text-end">
+            <pagination-controls
+              [autoHide]="autoHide"
+              [responsive]="responsive"
+              (pageChange)="page = $event"
+            ></pagination-controls>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+
+  <!-- !MODAL VIEW PRODUCT DETAILS -->
+
+  <!-- Modal -->
+  <div
+    class="modal fade"
+    id="productModal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title fw-bold" id="exampleModalLabel">
+            {{ productId.name }}
+          </h3>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div
+              class="col-md-4 d-flex align-items-start justify-content-center"
+            >
+              <img
+                [src]="productId.imgUrl"
+                class="img-fluid"
+                [alt]="productId.name"
+              />
+            </div>
+            <div class="col-md-8 px-3">
+              <h4 class="text-dark">
+                Product name:
+                <span class="fw-semibold">{{ productId.name }}</span>
+              </h4>
+
+              <h4>
+                price:
+                <ng-container *ngIf="productId.sale">
+                  <span class="text-danger fw-semibold">
+                    {{ productId.salePrice | currency }}
+                  </span>
+                </ng-container>
+                <ng-container *ngIf="productId.sale; else price">
+                  <span class="text-decoration-line-through text-muted">
+                    {{ productId.price | currency }}
+                  </span>
+                </ng-container>
+                <ng-template #price>
+                  <span class="fw-bold">
+                    {{ productId.price | currency }}
+                  </span>
+                </ng-template>
+              </h4>
+
+              <h4>
+                category:
+                <span class="fw-bold">{{ productId.categoryName }}</span>
+              </h4>
+
+              <h4 class="text-danger">Product description</h4>
+              <p>
+                {{ productId.description }}
+              </p>
+              <button
+                class="btn btn-outline-danger"
+                (click)="addToShoppingCard(productId)"
+              >
+                <i class="fa-solid fa-cart-plus"></i>
+                Add to card
+              </button>
+            </div>
+          </div>
+          <hr />
+          <h3>Recommend For You</h3>
+          <div
+            class="row row-cols-2 row-cols-sm-2 row-cols-md-4 row-cols-xl-4 g-3 px-2"
+          >
+            <div
+              class="col d-flex align-items-stretch"
+              *ngFor="let product of suggestionProductsForRecommend"
+              (click)="getById(product)"
+            >
+              <mat-card class="shop-card shadow">
+                <div class="sale-icon">10%</div>
+                <div class="d-flex align-items-center justify-content-center">
+                  <img
+                    [src]="product.imgUrl"
+                    [alt]="product.name"
+                    matCardImage
+                    class="img-fluid w-100"
+                  />
+                </div>
+
+                <div class="fw-bolder fs-6 d-name Modal-name">
+                  {{ product.name }}
+                </div>
+
+                <div class="d-flex align-items-center justify-content-between">
+                  <span class="fw-bold main-color fs-6 d-price Modal-name">
+                    {{ product.price | currency }}
+                  </span>
+                  <button
+                    class="btn btn-outline-danger btn-sm"
+                    (click)="addToShoppingCard(product)"
+                  >
+                    <i class="fa-solid fa-plus"></i>
+                  </button>
+                </div>
+              </mat-card>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            mat-flat-button
+            color="warn"
+            data-bs-dismiss="modal"
+          >
+            dismiss
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- !__________________________SERVICES__________________________________ -->
+  <div id="service" class="container py-5">
+    <div
+      class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-4 row-cols-xl-4 g-4"
+    >
+      <div class="col d-flex align-items-stretch">
+        <mat-card class="py-5">
+          <div class="text-center">
+            <i class="fa-solid fa-truck-fast fa-2x opacity-75"></i>
+            <h1 class="pt-3">{{ 'home.services.1' | translate }}</h1>
+            <p>
+              {{ 'home.services.text' | translate }}
+            </p>
+          </div>
+        </mat-card>
+      </div>
+      <div class="col d-flex align-items-stretch">
+        <mat-card class="py-5">
+          <div class="text-center">
+            <i class="fa-solid fa-address-card fa-2x opacity-75"></i>
+            <h1 class="pt-3">{{ 'home.services.2' | translate }}</h1>
+            <p>
+              {{ 'home.services.text' | translate }}
+            </p>
+          </div>
+        </mat-card>
+      </div>
+      <div class="col d-flex align-items-stretch">
+        <mat-card class="py-5">
+          <div class="text-center">
+            <i class="fa-solid fa-shield-halved fa-2x opacity-75"></i>
+            <h1 class="pt-3">{{ 'home.services.3' | translate }}</h1>
+            <p>
+              {{ 'home.services.text' | translate }}
+            </p>
+          </div>
+        </mat-card>
+      </div>
+      <div class="col d-flex align-items-stretch">
+        <mat-card class="py-5">
+          <div class="text-center">
+            <i class="fa-solid fa-headset fa-2x opacity-75"></i>
+            <h1 class="pt-3">{{ 'home.services.4' | translate }}</h1>
+            <p>
+              {{ 'home.services.text' | translate }}
+            </p>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>

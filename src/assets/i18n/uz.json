@@ -1,0 +1,34 @@
+{
+	"home": {
+		"categories": {
+			"1": "Ajoyib Taklif",
+			"2": "Yangi kelganlar",
+			"3": "Katta chegirmalar",
+			"4": "Mahsulotlar",
+			"view": "Hammasini ko'rish"
+		},
+		"product-categories": {
+			"1": "Elektronikalar",
+			"2": "Telefonlar",
+			"3": "Quloqchinlar",
+			"4": "Soatlar",
+			"5": "ko'zoynaklar",
+			"6": "Oyoq Kiyimlar",
+			"7": "Kosmetologiya",
+			"8": "O'simliklar"
+		},
+		"products": {
+			"1": {
+				"description": "",
+				"name": ""
+			}
+		},
+		"services": {
+			"1": "Butun dunyo bo'ylab yetkazib berish",
+			"2": "Xavfsiz to'lov",
+			"3": "Ishonch bilan xarid qiling",
+			"4": "24/7 qo'llab-quvvatlash",
+			"text": "Biz har qanday assortimentdagi 100 milliondan ortiq mahsulotimizga raqobatbardosh narxlarni taklif qilamiz."
+		}
+	}
+}

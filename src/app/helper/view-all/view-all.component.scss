@@ -1,0 +1,93 @@
+// We need to use ::ng-deep to overcome view encapsulation
+.sale-icon {
+  position: absolute;
+  top: 5%;
+  left: 5%;
+  background-color: #e94560;
+  border-radius: 10px;
+  color: #fff;
+  padding: 3px 15px;
+}
+
+::ng-deep {
+  .catgory {
+    z-index: 1000009999 !important;
+  }
+  .custom-slider .ngx-slider .ngx-slider-bar {
+    background: #f5f5f5;
+    height: 2px;
+  }
+  .custom-slider .ngx-slider .ngx-slider-selection {
+    background: #0f3360ab;
+  }
+
+  .custom-slider .ngx-slider .ngx-slider-pointer {
+    width: 4px;
+    height: 20px;
+    top: auto; /* to remove the default positioning */
+    bottom: -5px;
+    background-color: #0f3460;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+  }
+
+  .custom-slider .ngx-slider .ngx-slider-pointer:after {
+    display: none;
+  }
+
+  .custom-slider .ngx-slider .ngx-slider-bubble {
+    bottom: 14px;
+  }
+
+  .custom-slider .ngx-slider .ngx-slider-limit {
+    font-weight: bold;
+    color: #f5f5f5;
+  }
+
+  .custom-slider .ngx-slider .ngx-slider-tick {
+    width: 1px;
+    height: 10px;
+    margin-left: 4px;
+    border-radius: 0;
+    background: #f5f5f5;
+    top: -1px;
+  }
+
+  .custom-slider .ngx-slider .ngx-slider-tick.ngx-slider-selected {
+    background: #f5f5f5;
+  }
+}
+.placeholder-all-products {
+  width: 100%;
+  height: 150px;
+  background-color: #ccc;
+  border-radius: 10px !important;
+}
+@media (max-width: 767px) {
+  .placeholder-all-products {
+    height: 150px;
+  }
+}
+@media (max-width: 576px) {
+  .placeholder-all-products {
+    height: 170px;
+  }
+  .view {
+    margin-top: 50px;
+  }
+  .all-product-name {
+    font-size: 14px !important;
+  }
+}
+@media (max-width: 500px) {
+  .placeholder-all-products {
+    height: 140px;
+  }
+}
+@media (max-width: 440px) {
+  .placeholder-all-products {
+    height: 130px;
+  }
+}

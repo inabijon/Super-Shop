@@ -1,0 +1,578 @@
+<div class="container-fluid header">
+  <!-- !TOP -->
+  <div class="container">
+    <div class="row py-sm-2">
+      <div class="col-md-6 d-flex align-items-center top-head">
+        <small>
+          <i class="fa-solid fa-phone"></i>
+          &nbsp; +88012 3456 7894
+        </small>
+        <small>
+          <i class="fa-solid fa-envelope"></i>
+          &nbsp; support@ui-lib.com
+        </small>
+      </div>
+      <div
+        class="col-md-6 d-flex align-items-center justify-content-end top-head"
+      >
+        <small>
+          Theme FAQ"s
+        </small>
+
+        <small>
+          Need Help?
+        </small>
+
+        <!-- TODO _________________LANGUAGE____________________ -->
+        <small>
+          <!-- <img src="../../assets/flags/uz.svg" width="30px" alt="" /> -->
+
+          <!-- <select
+            class="form-control"
+            #selectedLang
+            (change)="switchLang(selectedLang.value)"
+          >
+            <option
+              *ngFor="let language of translate.getLangs()"
+              [value]="language"
+              [selected]="language === translate.currentLang"
+            >
+              {{ language }}
+            </option>
+          </select> -->
+        </small>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- !SEARCH BAR -->
+<div class="container-md py-2">
+  <div class="row">
+    <div
+      class="col-sm-2 d-flex align-items-center justify-content-start main-head main-logo"
+    >
+      <a routerLink="/">
+        <img src="../../assets/brand.png" class="brand" alt="" />
+      </a>
+    </div>
+    <div
+      class="col-sm-8 d-flex align-items-center justify-content-start main-head mobile-search"
+    >
+      <input
+        placeholder="Search and hit enter"
+        type="search"
+        class="form-control py-2 px-4 search-box position-relative"
+        #search="ngModel"
+        ngModel
+        name="search"
+        (keyup)="searchByNameOrCategoryName(search)"
+      />
+      <!-- * ------------------Result Search--------------------- -->
+      <ng-container *ngIf="allProducts.length > 0">
+        <div
+          *ngIf="search.value.length > 0"
+          class="search-box px-3 py-3 search-result"
+        >
+          <div
+            *ngFor="let searchResult of allProducts"
+            class="d-flex align-items-center py-1"
+          >
+            <div (click)="getById(searchResult)" class="flex-shrink-0">
+              <img
+                src="{{ searchResult.imgUrl }}"
+                width="50px"
+                alt="{{ searchResult.name }}"
+                (click)="getById(searchResult)"
+                data-bs-toggle="modal"
+                data-bs-target="#searchModal"
+              />
+            </div>
+            <div
+              (click)="getById(searchResult)"
+              class="flex-grow-1 ms-3 text-start fw-bold"
+            >
+              {{ searchResult.name }}
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+    <div
+      class="col-sm-2 py-2 d-flex align-items-center justify-content-around main-head mobile-shopping-card"
+    >
+      <div class="user-icon">
+        <ng-container *ngIf="userIsAuthenticated">
+          <div matTooltip="Logout">
+            <a class="text-dark text-decoration-none" (click)="logout()">
+              <i class="fa-solid fa-right-from-bracket"></i>
+            </a>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="!userIsAuthenticated">
+          <div matTooltip="Login">
+            <a routerLink="/auth/login" class="text-decoration-none text-dark">
+              <i class="fa-solid fa-user"></i>
+            </a>
+          </div>
+        </ng-container>
+      </div>
+      <ng-container *ngIf="isAdmin && userIsAuthenticated">
+        <div class="mobile-bottom-nav__item" matTooltip="Admin">
+          <!-- !ADMIN OR NOT ADMIN BUTTON -->
+          <div class="mobile-bottom-nav__item">
+            <a
+              class="text-dark text-decoration-none fa-2x"
+              routerLink="/admin/admin"
+            >
+              <span class="iconify" data-icon="wpf:administrator"></span>
+            </a>
+          </div>
+        </div>
+      </ng-container>
+      <div
+        class="user-icon position-relative"
+        matTooltip="Shopping Bag"
+        data-bs-toggle="offcanvas"
+        data-bs-target="#offcanvasRight"
+        aria-controls="offcanvasRight"
+      >
+        <i class="fa-solid fa-bag-shopping"></i>
+        <small
+          *ngIf="shopping_Bag.length > 0"
+          class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+        >
+          {{ shopping_Bag.length }}
+        </small>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ! NAVBAR -->
+<nav class="navbar navbar-expand-md">
+  <div class="container">
+    <div
+      *ngIf="searchBoxMobile"
+      class="btn-group d-flex align-items-center justify-content-center mx-auto w-100 search-Mobile"
+    >
+      <input
+        class="form-control w-100 px-4 search-mobile position-relative"
+        placeholder="search products"
+        name="searchMobile"
+        type="search"
+        #searchMobile="ngModel"
+        ngModel
+        (keyup)="searchByNameOrCategoryNameViaMobileVersion(searchMobile)"
+        [(ngModel)]="searchDataMobile"
+      />
+    </div>
+    <ng-container
+      *ngIf="
+        mobileSearchedProducts.length > 0 &&
+        searchBoxMobile &&
+        searchDataMobile.length > 0
+      "
+    >
+      <div class="search-box px-3 py-3 search-result">
+        <div
+          *ngFor="let searchResult of mobileSearchedProducts"
+          class="d-flex align-items-center py-1"
+        >
+          <div (click)="getById(searchResult)" class="flex-shrink-0">
+            <img
+              src="{{ searchResult.imgUrl }}"
+              width="50px"
+              alt="{{ searchResult.name }}"
+              (click)="getById(searchResult)"
+              data-bs-toggle="modal"
+              data-bs-target="#searchModal"
+            />
+          </div>
+          <div
+            (click)="getById(searchResult)"
+            class="flex-grow-1 ms-3 text-start fw-bold"
+          >
+            {{ searchResult.name }}
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <div class="ms-auto mobile-toggle-navbar">
+      <button
+        class="navbar-toggler"
+        type="button"
+        aria-label="Toggle navigation"
+        (click)="sidebarShow = !sidebarShow"
+      >
+        <i class="fa-solid fa-bars-staggered"></i>
+      </button>
+    </div>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" routerLink="/">
+            Home
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a
+            class="nav-link"
+            routerLink="/"
+            fragment="newProducts"
+            [queryParams]="{ category: 'new arrival' }"
+          >
+            new products
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+            class="nav-link"
+            routerLink="/"
+            fragment="discounts"
+            [queryParams]="{ category: 'discounts' }"
+          >
+            discounts
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+            class="nav-link"
+            routerLink="/"
+            fragment="shops"
+            [queryParams]="{ category: 'products' }"
+          >
+            all products
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link">contact us</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- !_____________________________MAIN MOBILE NAVBAR_____________________________________ -->
+<div class="sidebar-slider" [class.sidebar-slide-in]="sidebarShow">
+  <div class="sidebar-close" (click)="sidebarShow = !sidebarShow">
+    <i class="fa-solid fa-x"></i>
+  </div>
+  <div class="sidebar-content pt-5">
+    <ul>
+      <img src="../../assets/brand.png" class="brand" alt="" />
+      <hr />
+      <li>
+        <a (click)="sideMainNavbar()" routerLink="/" fragment="home">
+          <span class="iconify" data-icon="ci:home-alt-fill"></span>
+          Home
+        </a>
+      </li>
+
+      <li>
+        <a (click)="sideMainNavbar()" routerLink="/" fragment="newProducts">
+          <span class="iconify" data-icon="foundation:burst-new"></span>
+          new products
+        </a>
+      </li>
+      <li>
+        <a (click)="sideMainNavbar()" routerLink="/" fragment="discounts">
+          <span class="iconify" data-icon="fontisto:shopping-sale"></span>
+          discounts
+        </a>
+      </li>
+      <li>
+        <a (click)="sideMainNavbar()" routerLink="/" fragment="shops">
+          <span class="iconify" data-icon="carbon:collapse-all"></span>
+          All products
+        </a>
+      </li>
+      <li>
+        <a (click)="sideMainNavbar()">
+          <span
+            class="iconify"
+            data-icon="healthicons:contact-support-outline"
+          ></span>
+          contact us
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- !_______________________________NAVBAR BOTTOM WITH ICONS ________________________________________ -->
+
+<nav class="mobile-bottom-nav pt-4 pb-4">
+  <div class="mobile-bottom-nav__item mobile-bottom-nav__item--active">
+    <div
+      class="mobile-bottom-nav__item-content"
+      (click)="sidebarShow = !sidebarShow"
+    >
+      <span class="iconify fa-2x" data-icon="clarity:bars-line"></span>
+    </div>
+  </div>
+
+  <div class="mobile-bottom-nav__item">
+    <div class="mobile-bottom-nav__item-content" (click)="mobileSearchBox()">
+      <span class="iconify fa-2x" data-icon="ph:magnifying-glass"></span>
+    </div>
+  </div>
+  <div class="mobile-bottom-nav__item mobile-bottom-nav__item--active">
+    <div class="mobile-bottom-nav__item-content">
+      <a routerLink="/" class="text-decoration-none text-dark">
+        <span class="iconify fa-3x" data-icon="clarity:home-line"></span>
+      </a>
+    </div>
+  </div>
+  <div class="mobile-bottom-nav__item">
+    <div
+      data-bs-toggle="offcanvas"
+      data-bs-target="#offcanvasRight"
+      aria-controls="offcanvasRight"
+      class="mobile-bottom-nav__item-content position-relative"
+    >
+      <span class="iconify fa-2x" data-icon="bi:bag"></span>
+      <span
+        *ngIf="shopping_Bag.length > 0"
+        class="position-absolute top-50 start-50 translate-middle badge rounded bg-danger text-white px-1"
+      >
+        {{ shopping_Bag.length }}
+      </span>
+    </div>
+  </div>
+  <ng-container *ngIf="isAdmin && userIsAuthenticated">
+    <div class="mobile-bottom-nav__item">
+      <!-- !ADMIN OR NOT ADMIN BUTTON -->
+      <div class="mobile-bottom-nav__item">
+        <a
+          class="text-dark text-decoration-none fa-2x"
+          routerLink="/admin/admin"
+        >
+          <span class="iconify" data-icon="wpf:administrator"></span>
+        </a>
+      </div>
+    </div>
+  </ng-container>
+
+  <div class="mobile-bottom-nav__item">
+    <div class="mobile-bottom-nav__item-content">
+      <ng-container *ngIf="userIsAuthenticated">
+        <div class="mobile-bottom-nav__item" matTooltip="Logout">
+          <a class="text-dark text-decoration-none fa-2x" (click)="logout()">
+            <span class="iconify" data-icon="material-symbols:logout"></span>
+          </a>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="!userIsAuthenticated">
+        <div class="mobile-bottom-nav__item" matTooltip="Login">
+          <a
+            routerLink="/auth/login"
+            class="text-decoration-none text-dark fa-2x"
+          >
+            <span class="iconify" data-icon="ant-design:user-outlined"></span>
+          </a>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</nav>
+
+<!-- !________________________SHOPPING CARD OFF CANVAS______________________________ -->
+<div
+  class="offcanvas offcanvas-end"
+  tabindex="-1"
+  id="offcanvasRight"
+  aria-labelledby="offcanvasRightLabel"
+>
+  <div class="offcanvas-header">
+    <div class="text-center fs-5 fw-bold text-danger pt-3">
+      <span class="iconify text-danger" data-icon="bi:bag-check-fill"></span>
+      {{ shopping_Bag.length }} Product
+    </div>
+
+    <button
+      type="button"
+      class="btn-close text-reset"
+      data-bs-dismiss="offcanvas"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="offcanvas-body">
+    <div class="pe-2">
+      <hr />
+      <!--TODO________________Shopping bag arrive from service____________________ -->
+      <div
+        *ngFor="let bag of shopping_Bag"
+        class="d-flex align-items-center pr-5"
+      >
+        <div
+          class="flex-shrink-0 d-flex align-items-center justify-content-between"
+        >
+          <img width="80px" [src]="bag.imgUrl" [alt]="bag.name" />
+        </div>
+        <div class="flex-grow-1 ms-3 px-3">
+          {{ bag.name }}
+          <br />
+          <ng-container *ngIf="!bag.sale; else salePrice">
+            <div>{{ bag.price | currency }}</div>
+          </ng-container>
+          <br />
+          <ng-template #salePrice>{{ bag.salePrice | currency }}</ng-template>
+        </div>
+        <button
+          mat-icon-button
+          color="warn"
+          (click)="deleteProductFromShoppingCard(bag)"
+        >
+          <i class="fa-solid fa-trash"></i>
+        </button>
+      </div>
+      <mat-divider></mat-divider>
+      <div
+        class="py-3 px-4 fw-bold d-flex align-items-center justify-content-between"
+      >
+        <!-- <button mat-button color="primary" class="fs-6">
+          Total: {{ this.shoppingCardService.TOTAL | currency }}
+        </button> -->
+        <button mat-flat-button color="warn" (click)="checkOut()">
+          Checkout
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- !MODAL VIEW PRODUCT DETAILS -->
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="searchModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title fw-bold" id="exampleModalLabel">
+          {{ productId.name }}
+        </h3>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-4 d-flex align-items-start justify-content-center">
+            <img
+              [src]="productId.imgUrl"
+              class="img-fluid"
+              [alt]="productId.name"
+            />
+          </div>
+          <div class="col-md-8 px-3">
+            <h4 class="text-dark">
+              Product name:
+              <span class="fw-semibold">{{ productId.name }}</span>
+            </h4>
+
+            <h4>
+              price:
+              <ng-container *ngIf="productId.sale">
+                <span class="text-danger fw-semibold">
+                  {{ productId.salePrice | currency }}
+                </span>
+              </ng-container>
+              <ng-container *ngIf="productId.sale; else price">
+                <span class="text-decoration-line-through text-muted">
+                  {{ productId.price | currency }}
+                </span>
+              </ng-container>
+              <ng-template #price>
+                <span class="fw-bold">
+                  {{ productId.price | currency }}
+                </span>
+              </ng-template>
+            </h4>
+
+            <h4>
+              category:
+              <span class="fw-bold">{{ productId.categoryName }}</span>
+            </h4>
+
+            <h4 class="text-danger">Product description</h4>
+            <p>
+              {{ productId.description }}
+            </p>
+            <button
+              class="btn btn-outline-danger"
+              (click)="addToShoppingCard(productId)"
+            >
+              <i class="fa-solid fa-cart-plus"></i>
+              Add to card
+            </button>
+          </div>
+        </div>
+        <hr />
+        <h3>Recommend For You</h3>
+        <div
+          class="row row-cols-2 row-cols-sm-2 row-cols-md-4 row-cols-xl-4 g-3 px-2"
+        >
+          <div
+            class="col d-flex align-items-stretch"
+            *ngFor="let product of suggestionProductsForRecommend"
+            (click)="getById(product)"
+          >
+            <mat-card class="shop-card shadow">
+              <div class="sale-icon">10%</div>
+              <div
+                class="d-flex align-items-center justify-content-center pt-3"
+              >
+                <img
+                  [src]="product.imgUrl"
+                  [alt]="product.name"
+                  matCardImage
+                  class="img-fluid w-100"
+                />
+              </div>
+
+              <div class="fw-bolder fs-6 d-name Modal-name">
+                {{ product.name }}
+              </div>
+
+              <div class="d-flex align-items-center justify-content-between">
+                <span class="fw-bold main-color fs-6 d-price Modal-name">
+                  {{ product.price | currency }}
+                </span>
+                <button
+                  class="btn btn-outline-danger btn-sm"
+                  (click)="addToShoppingCard(product)"
+                >
+                  <i class="fa-solid fa-plus"></i>
+                </button>
+              </div>
+            </mat-card>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          mat-flat-button
+          color="warn"
+          data-bs-dismiss="modal"
+        >
+          dismiss
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,34 @@
+{
+	"home": {
+		"categories": {
+			"1": " Flash Delas",
+			"2": "New Arrivals",
+			"3": "Big Discounts",
+			"4": "Products  ",
+			"view": "View all"
+		},
+		"product-categories": {
+			"1": "Electronic",
+			"2": "Phones",
+			"3": "Headphones",
+			"4": "Watches",
+			"5": "Sunglasses",
+			"6": "Shoes",
+			"7": "Makeup",
+			"8": "Plants"
+		},
+		"products": {
+			"1": {
+				"description": "",
+				"name": ""
+			}
+		},
+		"services": {
+			"1": "Worldwide Delivery",
+			"2": "Safe Payment",
+			"3": "Shop With Confidence",
+			"4": "24/7 Support ",
+			"text": "We offer competitive prices on our 100 million plus product any range."
+		}
+	}
+}

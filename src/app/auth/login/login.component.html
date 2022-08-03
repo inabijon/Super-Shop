@@ -1,0 +1,81 @@
+<div class="container py-5">
+  <div class="row">
+    <div class="col-md-6">
+      <img
+        src="../../../assets/login/online shopping design concept the.png"
+        class="img-fluid"
+        alt="online shopping design"
+      />
+    </div>
+    <div class="col-md-6 py-3 d-flex align-items-center">
+      <div class="w-100">
+        <div class="text-center mx-auto">
+          <mat-spinner
+            class="mx-auto"
+            color="warn"
+            *ngIf="isLoading"
+          ></mat-spinner>
+        </div>
+        <form
+          #userLogin="ngForm"
+          *ngIf="!isLoading"
+          (ngSubmit)="loginUser(userLogin)"
+          class="w-100"
+        >
+          <h2 class="text-center fw-bold">LOGIN</h2>
+          <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Email</mat-label>
+            <input
+              matInput
+              type="email"
+              ngModel
+              required
+              #email="ngModel"
+              name="email"
+              [ngModelOptions]="{ standalone: false }"
+              maxlength="255"
+            />
+            <mat-hint align="end">{{ email.value?.length || 0 }}/255</mat-hint>
+          </mat-form-field>
+          <br />
+          <br />
+          <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Password</mat-label>
+            <input
+              matInput
+              type="password"
+              ngModel
+              required
+              #password="ngModel"
+              name="password"
+              [ngModelOptions]="{ standalone: false }"
+              maxlength="255"
+            />
+            <mat-hint align="end">
+              {{ password.value?.length || 0 }}/255
+            </mat-hint>
+          </mat-form-field>
+          <br />
+          <br />
+          <div class="text-end">
+            <button
+              [disabled]="!userLogin.valid"
+              class="px-5"
+              type="submit"
+              mat-raised-button
+              color="warn"
+            >
+              Login
+            </button>
+          </div>
+        </form>
+        <div class="text-center mt-4 pt-2">
+          <p class="small fw-bold mt-2 pt-1 mb-0">
+            Don't have an account?
+            <a routerLink="/auth/sign-up" class="link-danger">Register</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
