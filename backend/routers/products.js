@@ -94,7 +94,8 @@ router.get('/suggest', async (req, res) => {
   let suggest = await Product.aggregate([
     {
       $match: {
-        new: false
+        new: false,
+        sale: true
       },
     },
     { $sample: { size: 6 } },
@@ -304,6 +305,7 @@ router.post('/', async (req, res) => {
     salePrice: req.body.salePrice,
     qtyTotal: req.body.qtyTotal,
     total: req.body.total,
+    discountPercent: req.body.discountPercent
   })
   product = await product.save()
 

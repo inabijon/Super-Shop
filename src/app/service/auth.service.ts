@@ -6,7 +6,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { ToastrService } from 'ngx-toastr';
 
 
-const BACKEND_URL = 'http://localhost:3000/api';
+const BACKEND_URL = 'https://super7shop.herokuapp.com/api';
 
 @Injectable({
   providedIn: 'root',

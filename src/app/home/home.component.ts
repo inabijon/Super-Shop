@@ -32,6 +32,9 @@ export class HomeComponent implements OnInit {
 
   // *************LOADING**********************
   public isLoadingProducts: boolean = true
+  public isLoadingNewArrivalProducts: boolean = true
+  public isLoadingSuggestProducts: boolean = true
+
 
 
   // *************ACTIVE BUTTONS*******************
@@ -64,10 +67,10 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
 
-
-
-
+    // *****************LOADING**************************
     this.isLoadingProducts = true
+    this.isLoadingNewArrivalProducts = true
+    this.isLoadingSuggestProducts = true
 
     // ***********GET ALL PRODUCTS****************
     this.productService.getAllProducts().subscribe(
@@ -84,9 +87,14 @@ export class HomeComponent implements OnInit {
     this.productService.getSuggestProducts().subscribe(
       (data) => {
         this.suggestionProducts = data
+        this.isLoadingSuggestProducts = false
+
       },
       (error) => {
         console.error(error)
+        setTimeout(() => {
+          this.isLoadingSuggestProducts = false
+        }, 3000);
       },
     )
 
@@ -94,9 +102,13 @@ export class HomeComponent implements OnInit {
     this.productService.getNewArrivalProducts().subscribe(
       (data) => {
         this.newArrivalProducts = data
+        this.isLoadingNewArrivalProducts = false
       },
       (error) => {
         console.error(error)
+        setTimeout(() => {
+          this.isLoadingNewArrivalProducts = false
+        }, 3000)
       },
     )
 
@@ -234,8 +246,10 @@ export class HomeComponent implements OnInit {
   }
 
   // ***********************BY CATEGORY NAME***************************
+  // ***********GET ELECTRONIC PRODUCTS****************
   electronicProducts() {
-    // ***********GET ELECTRONIC PRODUCTS****************
+    this.isLoadingProducts = true
+
     this.productService.getTechnologiesProducts().subscribe(
       (data) => {
         this.productsByCategoryName = data
@@ -249,6 +263,8 @@ export class HomeComponent implements OnInit {
 
   // ***********GET PHONES PRODUCTS****************
   phoneProducts() {
+    this.isLoadingProducts = true
+
     this.productService.getPhoneProducts().subscribe(
       (data) => {
         this.productsByCategoryName = data
@@ -262,6 +278,7 @@ export class HomeComponent implements OnInit {
 
   // ***********GET HEADPHONES PRODUCTS****************
   headphoneProducts() {
+    this.isLoadingProducts = true
     this.productService.getHeadphoneProducts().subscribe(
       (data) => {
         this.productsByCategoryName = data
@@ -275,6 +292,7 @@ export class HomeComponent implements OnInit {
 
   // ***********GET WATCH PRODUCTS****************
   watchProducts() {
+    this.isLoadingProducts = true
     this.productService.getWatchProducts().subscribe(
       (data) => {
         this.productsByCategoryName = data
@@ -288,6 +306,7 @@ export class HomeComponent implements OnInit {
 
   // ***********GET SHOES PRODUCTS****************
   shoesProducts() {
+    this.isLoadingProducts = true
     this.productService.getShoesProducts().subscribe(
       (data) => {
         this.productsByCategoryName = data
@@ -301,6 +320,7 @@ export class HomeComponent implements OnInit {
 
   // ***********GET SUNGLASSES PRODUCTS****************
   sunglassProducts() {
+    this.isLoadingProducts = true
     this.productService.getSunglassesProducts().subscribe(
       (data) => {
         this.productsByCategoryName = data
@@ -314,6 +334,7 @@ export class HomeComponent implements OnInit {
 
   // ***********GET MAKEUP PRODUCTS****************
   makeupProducts() {
+    this.isLoadingProducts = true
     this.productService.getCosmetologyProducts().subscribe(
       (data) => {
         this.productsByCategoryName = data
@@ -327,6 +348,7 @@ export class HomeComponent implements OnInit {
 
   // ***********GET PLANTS PRODUCTS****************
   plantProducts() {
+    this.isLoadingProducts = true
     this.productService.getPlantProducts().subscribe(
       (data) => {
         this.productsByCategoryName = data
@@ -338,13 +360,20 @@ export class HomeComponent implements OnInit {
     )
   }
 
+  loadingDialog: boolean = true
+  loadingRecommend: boolean = true
   getById(product: Product) {
+    this.loadingDialog = true
     this.productService.getProductById(product).subscribe(data => {
       this.productId = data
+      this.loadingDialog = false
     })
+    this.loadingRecommend = true
+
     this.productService.getRecommendProducts(product).subscribe(
       (data) => {
         this.suggestionProductsForRecommend = data
+        this.loadingRecommend = false
       },
       (error) => {
         console.error(error)
@@ -355,9 +384,7 @@ export class HomeComponent implements OnInit {
   // **************************ADD TO CARD************************************
   addToShoppingCard(product: Product) {
     if (!this.ShoppingCardService.productInCard(product)) {
-
       this.ShoppingCardService.addToCard(product)
-
     }
   }
 

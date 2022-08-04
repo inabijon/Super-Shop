@@ -98,6 +98,7 @@ a {
 
 .all-product-name {
   font-size: 16px !important;
+  font-weight: 550;
 }
 .Modal-name {
   font-size: 12px !important;
@@ -105,17 +106,19 @@ a {
 
 @media (max-width: 767px) {
   .sale-card {
-    width: 150px;
+    width: 95%;
     margin: 0 auto;
   }
   .discount-card {
-    width: 150px;
+    width: 95%;
+    margin: 0 auto;
   }
   .placeholder-all-products {
     height: 150px;
   }
   .all-product-name {
     font-size: 14px !important;
+    font-weight: 600;
   }
 }
 
@@ -134,7 +137,11 @@ a {
   }
   .all-product-name {
     font-size: 14px !important;
-    font-weight: 500;
+    font-weight: 600;
+  }
+  .discount-card {
+    width: 95%;
+    margin: 0 auto;
   }
 }
 
@@ -143,7 +150,7 @@ a {
     width: 100%;
   }
   .discount-card {
-    width: 130px;
+    width: 95%;
     height: auto;
   }
   #service .mat-card h1 {
@@ -152,7 +159,7 @@ a {
   }
   #service .mat-card p {
     font-size: 12px;
-    font-weight: normal;
+    font-weight: 600;
     line-height: 20px;
     opacity: 0.8;
   }
@@ -161,24 +168,25 @@ a {
   }
   .all-product-name {
     font-size: 13px !important;
+    font-weight: 600;
   }
   .sale-card {
-    width: 130px;
+    width: 95%;
     margin: 0 auto;
   }
 }
 @media (max-width: 440px) {
   .sale-card {
-    width: 150px;
+    width: 95%;
     margin: 0 auto;
   }
   .sale-name,
   .sale-price {
     font-size: 12px !important;
-    font-weight: 500 !important;
+    font-weight: 600 !important;
   }
   .discount-card {
-    width: 150px;
+    width: 95%;
   }
   .d-name,
   .d-price {
@@ -191,7 +199,7 @@ a {
 }
 @media (max-width: 425px) {
   .sale-card {
-    width: 80%;
+    width: 90%;
     height: auto;
     margin: 0 auto;
   }

@@ -114,7 +114,9 @@
             *ngIf="!isLoadingProducts"
             (click)="getById(product)"
           >
-            <div class="sale-icon">10%</div>
+            <div class="sale-icon" *ngIf="product.sale">
+              {{ product.discountPercent }}% off
+            </div>
             <div class="d-flex align-items-center justify-content-center pt-3">
               <img
                 [src]="product.imgUrl"
@@ -188,7 +190,11 @@
         ></button>
       </div>
       <div class="modal-body">
-        <div class="row">
+        <!-- *****************LOADING*********************** -->
+        <div class="d-flex align-items-center justify-content-center">
+          <mat-spinner color="warn" *ngIf="loadingDialog"></mat-spinner>
+        </div>
+        <div class="row" *ngIf="!loadingDialog">
           <div class="col-md-4 d-flex align-items-start justify-content-center">
             <img
               [src]="productId.imgUrl"
@@ -230,8 +236,13 @@
             <p>
               {{ productId.description }}
             </p>
-
-            <button class="btn btn-outline-danger">add to card</button>
+            <button
+              class="btn btn-outline-danger"
+              (click)="addToShoppingCard(productId)"
+            >
+              <i class="fa-solid fa-cart-plus"></i>
+              Add to card
+            </button>
           </div>
         </div>
         <hr />
@@ -239,19 +250,53 @@
         <div
           class="row row-cols-2 row-cols-sm-2 row-cols-md-4 row-cols-xl-4 g-3 px-2"
         >
+          <!-- *****************LOADING*********************** -->
+          <ng-container
+            class="mx-auto text-center d-flex align-items-center justify-content-center"
+            *ngIf="loadingRecommend"
+          >
+            <div
+              class="col d-flex align-items-stretch"
+              *ngFor="let product of [1, 2, 3, 4]"
+            >
+              <mat-card class="shop-card shadow w-100" aria-hidden="true">
+                <div class="d-flex align-items-center justify-content-center">
+                  <img
+                    matCardImage
+                    class="placeholder placeholder-glow placeholder-all-products mt-2"
+                  />
+                </div>
+
+                <div class="placeholder-glow fw-bolder fs-6 d-name">
+                  <span class="placeholder col-6"></span>
+                </div>
+
+                <div
+                  class="placeholder-glow d-flex align-items-center justify-content-between pb-3"
+                >
+                  <span class="placeholder col-4"></span>
+                  <button class="btn btn-outline-danger btn-sm placeholder">
+                    <i class="fa-solid fa-plus placeholder"></i>
+                  </button>
+                </div>
+              </mat-card>
+            </div>
+          </ng-container>
           <div
             class="col d-flex align-items-stretch"
             *ngFor="let product of suggestionProductsForRecommend"
             (click)="getById(product)"
           >
-            <mat-card class="shop-card shadow">
-              <div class="sale-icon">10%</div>
+            <mat-card class="shop-card shadow w-100" *ngIf="!loadingRecommend">
+              <div class="sale-icon" *ngIf="product.sale">
+                {{ product.discountPercent }}%
+              </div>
               <div class="d-flex align-items-center justify-content-center">
                 <img
                   [src]="product.imgUrl"
                   [alt]="product.name"
                   matCardImage
-                  class="img-fluid w-100"
+                  class="img-fluid w-100 pt-3"
                 />
               </div>
 
@@ -263,7 +308,10 @@
                 <span class="fw-bold main-color fs-6 d-price Modal-name">
                   {{ product.price | currency }}
                 </span>
-                <button class="btn btn-outline-danger btn-sm">
+                <button
+                  class="btn btn-outline-danger btn-sm"
+                  (click)="addToShoppingCard(product)"
+                >
                   <i class="fa-solid fa-plus"></i>
                 </button>
               </div>

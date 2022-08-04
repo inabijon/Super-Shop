@@ -5,7 +5,7 @@
       <div class="col-md-6 d-flex align-items-center top-head">
         <small>
           <i class="fa-solid fa-phone"></i>
-          &nbsp; +88012 3456 7894
+          &nbsp; +99 897 361 91 77
         </small>
         <small>
           <i class="fa-solid fa-envelope"></i>
@@ -66,6 +66,7 @@
         #search="ngModel"
         ngModel
         name="search"
+        [(ngModel)]="searchProduct"
         (keyup)="searchByNameOrCategoryName(search)"
       />
       <!-- * ------------------Result Search--------------------- -->
@@ -89,8 +90,10 @@
               />
             </div>
             <div
-              (click)="getById(searchResult)"
               class="flex-grow-1 ms-3 text-start fw-bold"
+              (click)="getById(searchResult)"
+              data-bs-toggle="modal"
+              data-bs-target="#searchModal"
             >
               {{ searchResult.name }}
             </div>
@@ -193,6 +196,8 @@
           <div
             (click)="getById(searchResult)"
             class="flex-grow-1 ms-3 text-start fw-bold"
+            data-bs-toggle="modal"
+            data-bs-target="#searchModal"
           >
             {{ searchResult.name }}
           </div>
@@ -453,13 +458,13 @@
   class="modal fade"
   id="searchModal"
   tabindex="-1"
-  aria-labelledby="exampleModalLabel"
+  aria-labelledby="searchModal"
   aria-hidden="true"
 >
   <div class="modal-dialog modal-lg modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
-        <h3 class="modal-title fw-bold" id="exampleModalLabel">
+        <h3 class="modal-title fw-bold" id="searchModal">
           {{ productId.name }}
         </h3>
         <button
@@ -470,7 +475,11 @@
         ></button>
       </div>
       <div class="modal-body">
-        <div class="row">
+        <!-- *****************LOADING*********************** -->
+        <div class="d-flex align-items-center justify-content-center">
+          <mat-spinner color="warn" *ngIf="loadingDialog"></mat-spinner>
+        </div>
+        <div class="row" *ngIf="!loadingDialog">
           <div class="col-md-4 d-flex align-items-start justify-content-center">
             <img
               [src]="productId.imgUrl"
@@ -526,16 +535,48 @@
         <div
           class="row row-cols-2 row-cols-sm-2 row-cols-md-4 row-cols-xl-4 g-3 px-2"
         >
+          <!-- *****************LOADING*********************** -->
+          <ng-container
+            class="mx-auto text-center d-flex align-items-center justify-content-center"
+            *ngIf="loadingRecommend"
+          >
+            <div
+              class="col d-flex align-items-stretch"
+              *ngFor="let product of [1, 2, 3, 4]"
+            >
+              <mat-card class="shop-card shadow w-100" aria-hidden="true">
+                <div class="d-flex align-items-center justify-content-center">
+                  <img
+                    matCardImage
+                    class="placeholder placeholder-glow placeholder-all-products my-2"
+                  />
+                </div>
+
+                <div class="placeholder-glow fw-bolder fs-6 d-name">
+                  <span class="placeholder col-6"></span>
+                </div>
+
+                <div
+                  class="placeholder-glow d-flex align-items-center justify-content-between pb-3"
+                >
+                  <span class="placeholder col-4"></span>
+                  <button class="btn btn-outline-danger btn-sm placeholder">
+                    <i class="fa-solid fa-plus placeholder"></i>
+                  </button>
+                </div>
+              </mat-card>
+            </div>
+          </ng-container>
           <div
             class="col d-flex align-items-stretch"
             *ngFor="let product of suggestionProductsForRecommend"
             (click)="getById(product)"
           >
-            <mat-card class="shop-card shadow">
-              <div class="sale-icon">10%</div>
-              <div
-                class="d-flex align-items-center justify-content-center pt-3"
-              >
+            <mat-card class="shop-card shadow w-100" *ngIf="!loadingRecommend">
+              <div class="sale-icon" *ngIf="product.sale">
+                {{ product.discountPercent }}%
+              </div>
+              <div class="d-flex align-items-center justify-content-center">
                 <img
                   [src]="product.imgUrl"
                   [alt]="product.name"

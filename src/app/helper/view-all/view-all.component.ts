@@ -128,16 +128,25 @@ export class ViewAllComponent implements OnInit {
       })
     }
   }
+  loadingDialog: boolean = true
+  loadingRecommend: boolean = true
+
   getById(product: Product) {
+    this.loadingDialog = true
+    this.loadingRecommend = true
     this.productService.getProductById(product).subscribe(data => {
       this.productId = data
+      this.loadingDialog = false
     })
     this.productService.getRecommendProducts(product).subscribe(
       (data) => {
         this.suggestionProductsForRecommend = data
+        this.loadingRecommend = false
       },
       (error) => {
         console.error(error)
+        this.loadingDialog = false
+        this.loadingRecommend = false
       },
     )
 

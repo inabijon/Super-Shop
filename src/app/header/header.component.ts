@@ -28,6 +28,10 @@ export class HeaderComponent implements OnInit {
   mobileSearchedProducts: Product[] = []
   searchDataMobile: any
 
+  // Loading
+  loadingRecommend: boolean = true
+  loadingDialog: boolean = true
+
   constructor(
     private productService: ProductService,
     private router: Router,
@@ -101,18 +105,30 @@ export class HeaderComponent implements OnInit {
   mobileSearchBox() {
     this.searchBoxMobile = !this.searchBoxMobile
   }
+  searchProduct: any
 
   getById(product: Product) {
+    this.searchProduct = '';
+    this.searchBoxMobile = false
+    this.searchDataMobile = '';
+    this.loadingDialog = true
+    this.loadingRecommend = true
     this.productService.getProductById(product).subscribe((data) => {
       this.productId = data
+      this.loadingDialog = false
     })
 
     this.productService.getRecommendProducts(product).subscribe(
       (data) => {
         this.suggestionProductsForRecommend = data
+        this.loadingRecommend = false
       },
       (error) => {
         console.error(error)
+        setTimeout(() => {
+          this.loadingDialog = false
+          this.loadingRecommend = false
+        }, 3000);
       },
     )
   }

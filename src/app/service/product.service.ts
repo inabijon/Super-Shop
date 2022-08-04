@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Product } from '../models/product';
 
-const BACKEND_URL = 'http://localhost:3000/api/products';
+const BACKEND_URL = 'https://super7shop.herokuapp.com/api/products';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +16,7 @@ export class ProductService {
   constructor(private http: HttpClient) { }
 
   getCategories() {
-    return this.http.get<Product[]>("http://localhost:3000/api/categories")
+    return this.http.get<Product[]>("https://super7shop.herokuapp.com/api/categories")
   }
 
   getAllProducts() {

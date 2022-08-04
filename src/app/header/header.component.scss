@@ -260,6 +260,9 @@ a {
 .search-Mobile {
   display: none !important;
 }
+.Modal-name {
+  font-size: 14px;
+}
 
 @media (max-width: 1200px) {
   .brand {
@@ -283,6 +286,13 @@ a {
   }
 }
 @media (max-width: 576px) {
+  .placeholder-all-products {
+    height: 120px !important;
+  }
+  .Modal-name {
+    font-size: 13px !important;
+    font-weight: 600;
+  }
   .top-head {
     padding: 0px 0 !important;
     display: flex !important;
@@ -340,6 +350,13 @@ a {
   }
 }
 
+.placeholder-all-products {
+  width: 100%;
+  height: 180px;
+  background-color: #ccc;
+  border-radius: 10px;
+}
+
 @media (max-width: 500px) {
   .sidebar-slider,
   .sidebar-sliderC {
@@ -347,5 +364,13 @@ a {
   }
   .brand {
     width: 65px !important;
+  }
+
+  .Modal-name {
+    font-size: 12px !important;
+    font-weight: 600;
+  }
+  .placeholder-all-products {
+    height: 120px !important;
   }
 }
